@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import PatientForm from './components/PatientForm';
 import PatientList from './components/PatientList';
+import QueryInterface from './components/QueryInterface';
 import SyncStatus from './components/SyncStatus';
 import { getPatients, initializeDB, savePatient } from './services/db';
 import './styles.css';
+import './components/QueryInterface.css';
 
 function App() {
   const [patients, setPatients] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [currentView, setCurrentView] = useState('list'); // 'list' or 'form'
+  const [currentView, setCurrentView] = useState('list'); // 'list', 'form', or 'query'
   const [selectedPatient, setSelectedPatient] = useState(null);
 
   useEffect(() => {
@@ -70,6 +72,10 @@ function App() {
     setCurrentView('list');
   };
 
+  const handleQueryClick = () => {
+    setCurrentView('query');
+  };
+
   if (isLoading) {
     return <div className="loading">Loading...</div>;
   }
@@ -85,39 +91,67 @@ function App() {
       <SyncStatus />
       
       <main className="main-content">
-        {currentView === 'list' ? (
-          <>
-            <div className="actions-bar">
-              <h2>Patient Records</h2>
-              <button 
-                className="button primary" 
-                onClick={handleAddNewClick}
-              >
-                Add New Patient
-              </button>
-            </div>
-            <PatientList 
-              patients={patients} 
-              onEdit={handleEditPatient} 
-            />
-          </>
-        ) : (
-          <>
-            <div className="actions-bar">
-              <h2>{selectedPatient ? 'Edit Patient' : 'New Patient'}</h2>
-              <button 
-                className="button secondary" 
-                onClick={handleFormCancel}
-              >
-                Back to List
-              </button>
-            </div>
-            <PatientForm 
-              patient={selectedPatient} 
-              onSave={handleFormSave} 
-              onCancel={handleFormCancel} 
-            />
-          </>
+        <div className="actions-bar">
+          <div className="tabs">
+            <button 
+              className={`tab-button ${currentView === 'list' ? 'active' : ''}`}
+              onClick={() => setCurrentView('list')}
+            >
+              Patient Records
+            </button>
+            <button 
+              className={`tab-button ${currentView === 'query' ? 'active' : ''}`}
+              onClick={handleQueryClick}
+            >
+              SQL Query Tool
+            </button>
+          </div>
+          
+          {currentView === 'list' && (
+            <button 
+              className="button primary" 
+              onClick={handleAddNewClick}
+            >
+              Add New Patient
+            </button>
+          )}
+          
+          {currentView === 'form' && (
+            <button 
+              className="button secondary" 
+              onClick={handleFormCancel}
+            >
+              Back to List
+            </button>
+          )}
+          
+          {currentView === 'query' && (
+            <button 
+              className="button secondary" 
+              onClick={() => setCurrentView('list')}
+            >
+              Back to List
+            </button>
+          )}
+        </div>
+        
+        {currentView === 'list' && (
+          <PatientList 
+            patients={patients} 
+            onEdit={handleEditPatient} 
+          />
+        )}
+        
+        {currentView === 'form' && (
+          <PatientForm 
+            patient={selectedPatient} 
+            onSave={handleFormSave} 
+            onCancel={handleFormCancel} 
+          />
+        )}
+        
+        {currentView === 'query' && (
+          <QueryInterface />
         )}
       </main>
     </div>
