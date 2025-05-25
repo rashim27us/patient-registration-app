@@ -1,21 +1,18 @@
-import { createPGlite } from '@pglite/sqlite-wasm';
+import { PGlite } from '@electric-sql/pglite';
 
-let db = null;
+let pgLiteDb = null;
 
 export const initDatabase = async () => {
   try {
-    // Initialize PGlite instance
-    db = await createPGlite();
-    
-    // Initialize connection
-    await db.connect({
-      // Using in-memory database for this example
-      // For persistence, we'll use IndexedDB integration later
-      connectionString: 'postgresql://postgres:postgres@localhost:5432/patientdb'
+    pgLiteDb = new PGlite({
+      inMemory: false
     });
+    if (pgLiteDb.ready && typeof pgLiteDb.ready.then === 'function') {
+      await pgLiteDb.ready;
+    }
     
     console.log('PGlite database initialized successfully');
-    return db;
+    return pgLiteDb;
   } catch (error) {
     console.error('Failed to initialize PGlite database:', error);
     throw error;
@@ -23,8 +20,10 @@ export const initDatabase = async () => {
 };
 
 export const getDatabase = () => {
-  if (!db) {
+  if (!pgLiteDb) {
     throw new Error('Database not initialized. Call initDatabase() first.');
   }
-  return db;
+  return pgLiteDb;
 };
+
+export const getRawPGlite = getDatabase;
