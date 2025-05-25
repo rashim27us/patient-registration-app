@@ -36,7 +36,7 @@ Input validation to ensure data integrity
 
 Clone the repository:
 ```bash
-[git clone <repository-url>](https://github.com/rashim27us/patient-registration-app.git)
+git clone https://github.com/rashim27us/patient-registration-app.git
 ```
 
 Navigate to the project directory:
