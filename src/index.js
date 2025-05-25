@@ -1,16 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import './styles.css';
 import { initDatabase } from './config/database';
-import { createSchema } from './db/schema';
 
-// Initialize database before rendering the app
-const startApp = async () => {
+// Initialize the database when the application starts
+async function initApp() {
   try {
+    // Initialize the database
     await initDatabase();
-    await createSchema();
+    console.log('Database initialized successfully');
     
+    // Render the React application
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(
       <React.StrictMode>
@@ -18,18 +18,20 @@ const startApp = async () => {
       </React.StrictMode>
     );
   } catch (error) {
-    console.error('Failed to initialize application:', error);
-    // Show error to user
-    document.getElementById('root').innerHTML = `
+    console.error('Failed to initialize the application:', error);
+    // Display an error message to the user
+    const rootElement = document.getElementById('root');
+    rootElement.innerHTML = `
       <div style="color: red; text-align: center; margin-top: 50px;">
         <h1>Application Error</h1>
-        <p>Failed to initialize the database. Please refresh the page or contact support.</p>
+        <p>Failed to initialize the database. Please try again later.</p>
+        <p>Error: ${error.message}</p>
       </div>
     `;
   }
-};
+}
 
-startApp();
+initApp();
 
 // Add support for hot module replacement
 if (module.hot) {
