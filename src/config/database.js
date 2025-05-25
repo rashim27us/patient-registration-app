@@ -7,7 +7,10 @@ export async function initDatabase() {
   try {
     console.log('Starting database initialization...');
     if (!db) {
-      db = new PGlite();
+      db = new PGlite({
+        wasmUrl: '/pglite.wasm',
+        dataUrl: '/pglite.data'
+      });
       // Create patients table if it doesn't exist
       await db.query(`
         CREATE TABLE IF NOT EXISTS patients (
