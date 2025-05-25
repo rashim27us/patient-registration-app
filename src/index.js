@@ -33,7 +33,7 @@ const startApp = async () => {
   }
 }
 
-initApp();
+startApp();
 
 // Add support for hot module replacement
 if (module.hot) {
