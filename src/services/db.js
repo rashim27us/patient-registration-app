@@ -1,3 +1,5 @@
+import { syncLocalStorageToPGlite } from '../config/database';
+
 export const initializeDB = () => {
   console.log('Database initialized (mock)');
   
@@ -29,6 +31,8 @@ export const savePatient = (patient) => {
       patients.push(patient);
     }
     localStorage.setItem('patients', JSON.stringify(patients));
+    // Sync to pglite after saving
+    syncLocalStorageToPGlite();
     return patient;
   } catch (error) {
     console.error('Error saving patient to localStorage:', error);
