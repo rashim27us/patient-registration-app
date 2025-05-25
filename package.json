@@ -8,14 +8,16 @@
     "build": "webpack --mode production",
     "test": "jest --watch",
     "lint": "eslint src/**/*.js",
-    "migrate": "node src/db/runMigrations.js"
+    "generate": "drizzle-kit generate",
+    "migrate": "node -r esbuild-register src/db/migrate.js"
   },
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "@pglite/sqlite-wasm": "^0.2.0",
+    "@libsql/client": "^0.15.7",
+    "dotenv": "^16.3.1",
+    "drizzle-orm": "^0.43.1",
     "pg": "^8.11.3",
-    "dotenv": "^16.3.1"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.27.1",
@@ -23,13 +25,14 @@
     "@babel/preset-react": "^7.27.1",
     "babel-loader": "^8.2.3",
     "css-loader": "^7.1.2",
+    "drizzle-kit": "^0.31.1",
+    "eslint": "^8.0.0",
     "html-webpack-plugin": "^5.6.3",
     "jest": "^27.4.5",
     "style-loader": "^4.0.0",
     "webpack": "^5.64.4",
     "webpack-cli": "^4.9.1",
-    "webpack-dev-server": "^4.6.0",
-    "eslint": "^8.0.0"
+    "webpack-dev-server": "^4.6.0"
   },
   "keywords": [
     "patient",
