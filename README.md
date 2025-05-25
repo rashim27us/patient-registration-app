@@ -110,6 +110,25 @@ patient-registration-app/
 
 The application uses two storage mechanisms:
 - **IndexedDB (`patientService.js`)**: For primary patient data storage  
-- **localStorage (`db.js`)**: For simple operations and cross-tab synchronization  
+- **localStorage (`db.js`)**: For simple operations and cross-tab synchronization
+
+## Challenges Faced During Development
+
+### 1. Data Storage Consistency and Technology Transition
+Initially, the app used IndexedDB (via the `idb` package) for structured data storage in the browser. This was chosen because IndexedDB is natively supported in all browsers and allows for persistent, client-side storage without any backend. However, IndexedDB does not support SQL queries, which limited our ability to provide a flexible query interface for users.
+
+As the project evolved, we needed to support raw SQL queries in the browser. To achieve this, we integrated pglite—a WASM-based, PostgreSQL-compatible engine that runs entirely in the browser. This allowed us to offer a true SQL experience for querying patient data. The transition required us to implement data synchronization between the original IndexedDB/localStorage and the new pglite database, ensuring that all patient data remained consistent and accessible regardless of the storage backend.
+
+### 2. SQL Support in the Browser
+Supporting raw SQL queries in a browser environment is non-trivial. IndexedDB does not natively support SQL, so we had to use pglite (a WASM-based PostgreSQL-like engine) to allow users to run real SQL queries on the client side. This required changes to the data model and query service.
+
+### 3. Data Type Mismatches
+When migrating from localStorage/IndexedDB to pglite, we encountered issues with ID types. Patient IDs generated with `Date.now()` were too large for the default `SERIAL` (integer) type in SQL, causing errors. We fixed this by changing the `id` column to `TEXT` in the SQL schema.
+
+### 4. Keeping UI and Data in Sync
+Ensuring that new or updated patients were immediately visible in the SQL query interface required careful synchronization after every save operation. We added automatic syncing from localStorage to pglite after each patient save.
+
+### 5. Error Handling and Debugging
+Browser-based SQL engines and storage APIs can fail silently or behave differently across browsers. We added robust error handling and logging to help diagnose and resolve issues quickly during development.
 
 
