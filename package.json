@@ -8,7 +8,8 @@
     "build": "webpack --mode production",
     "test": "jest --watch",
     "lint": "eslint src/**/*.js",
-    "migrate": "node src/db/runMigrations.js"
+    "generate": "drizzle-kit generate",
+    "migrate": "node -r esbuild-register src/db/migrate.js"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.3.2",
@@ -16,6 +17,7 @@
     "idb": "^8.0.3",
     "pg": "^8.11.3",
     "react": "^18.2.0",
+    "react-dom": "^18.2.0"
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
@@ -30,6 +32,7 @@
     "style-loader": "^4.0.0",
     "webpack": "^5.64.4",
     "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.6.0"
     "webpack-dev-server": "^4.6.0"
   },
   "keywords": [
@@ -60,3 +63,4 @@
     "url": "https://github.com/yourusername/patient-registration-app/issues"
   }
 }
+
