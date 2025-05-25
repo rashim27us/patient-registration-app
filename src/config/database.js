@@ -1,5 +1,4 @@
 import { PGlite } from '@electric-sql/pglite';
-import { PGlite } from '@electric-sql/pglite';
 
 let db;
 
